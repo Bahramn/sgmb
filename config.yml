@@ -1,0 +1,13 @@
+app:
+  env: "development"
+
+server:
+  TCP:
+    Active: true
+    Address: ":1869"
+  UDP:
+    Active: true
+    Address: ":1869"
+
+log:
+  path: "./storage/logs/"
