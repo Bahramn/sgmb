@@ -8,6 +8,9 @@ server:
   UDP:
     Active: true
     Address: ":1869"
+  HTTP:
+    Active: true
+    Address: ":1969"
 
 log:
   path: "./storage/logs/"

@@ -166,3 +166,17 @@ func (s *Server) CheckClientsByLastPingAt() {
 		}
 	}
 }
+
+func (s *Server) ServeHttp(httpConf config.Protocol) {
+	if !httpConf.Active {
+		log.Println("HTTP server is not active")
+		return
+	}
+	api := newHttpApi(s)
+	err := api.runApi(s, httpConf.Address)
+	if err != nil {
+		log.Printf("Error on serving api on %s %v", httpConf.Address, err.Error())
+		return
+	}
+	log.Println("HTTP API in listening on " + httpConf.Address)
+}
