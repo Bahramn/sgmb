@@ -30,12 +30,23 @@ func (api *httpApi) appIndex(w http.ResponseWriter, r *http.Request) {
 	@TODO: Add devices and mobiles info in response
 */
 type clientsRes struct {
-	Total int
+	Total   int                 `json:"total"`
+	Mobiles []TransformedClient `json:"mobiles"`
+	Devices []TransformedClient `json:"devices"`
+}
+
+type TransformedClient struct {
+	TYPE          string `json:"type"`
+	Id            string `json:"id"`
+	ConnType      string `json:"connectionType"`
+	LastCheckedAt string `json:"lastCheckedAt"`
 }
 
 func (api *httpApi) getClients(w http.ResponseWriter, r *http.Request) {
 	cRes := clientsRes{
-		Total: api.s.NumberOfClients(),
+		Total:   api.s.NumberOfClients(),
+		Mobiles: transformClients(api.s.GetMobileClients()),
+		Devices: transformClients(api.s.GetDeviceClients()),
 	}
 
 	cResJson, err := json.Marshal(cRes)
@@ -46,4 +57,18 @@ func (api *httpApi) getClients(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(cResJson)
+}
+
+func transformClients(clients []*Client) []TransformedClient {
+	tClients := make([]TransformedClient, 0)
+	for _, c := range clients {
+		tClients = append(tClients, TransformedClient{
+			TYPE:          c.originType,
+			Id:            c.id,
+			ConnType:      c.connType,
+			LastCheckedAt: c.lastCheckedAt.Format("2006-01-02 15:04:05"),
+		})
+	}
+
+	return tClients
 }

@@ -14,6 +14,9 @@ const MsgResNok = "JB_NOK"
 
 const UnknownClient = "anonymous"
 
+const OriginMobile = "$"
+const OriginDevice = "@"
+
 type Server struct {
 	clients  map[string]*Client
 	commands chan Command
@@ -50,6 +53,7 @@ func (s *Server) NewTcpClient(conn net.Conn) {
 	c := &Client{
 		conn:     tcpConn,
 		id:       UnknownClient,
+		connType: "TCP",
 		commands: s.commands,
 	}
 
@@ -179,4 +183,23 @@ func (s *Server) ServeHttp(httpConf config.Protocol) {
 		return
 	}
 	log.Println("HTTP API in listening on " + httpConf.Address)
+}
+
+func (s Server) getClientsByType(t string) []*Client {
+	var clients = make([]*Client, 0)
+	for _, c := range s.clients {
+		if c.originType == t {
+			clients = append(clients, c)
+		}
+	}
+
+	return clients
+}
+
+func (s *Server) GetMobileClients() []*Client {
+	return s.getClientsByType(OriginMobile)
+}
+
+func (s *Server) GetDeviceClients() []*Client {
+	return s.getClientsByType(OriginDevice)
 }

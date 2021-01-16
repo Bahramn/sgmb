@@ -15,6 +15,7 @@ type Client struct {
 	id            string
 	conn          Connection
 	connType      string
+	originType    string
 	lastCheckedAt time.Time
 	commands      chan<- Command
 }
@@ -28,6 +29,7 @@ func (c Client) ReadInput(input string) {
 	}
 
 	c.id = msg.Sender
+	c.originType = msg.Symbol
 	c.commands <- Command{
 		id:      msg.CmdId,
 		message: msg,

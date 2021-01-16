@@ -11,7 +11,7 @@ const MsgTypeRdy = "RDY"
 const MsgTypeQuit = "QUIT"
 
 type Message struct {
-	Symbol   rune
+	Symbol   string
 	Sender   string
 	Receiver string
 	Body     string
@@ -34,13 +34,13 @@ func ParsMessage(inp string) (*Message, error) {
 	msg.Receiver = args[1]
 	msg.Body = helpers.TrimLastChar(args[2])
 	msg.CmdId = detectCommandId(msg.Body)
-	msg.Symbol = []rune(args[0][0:1])[0]
+	msg.Symbol = args[0][0:1]
 
 	return &msg, err
 }
 
 func (msg *Message) Build() string {
-	return fmt.Sprintf("%c%s*%s*%s#", msg.Symbol, msg.Sender, msg.Receiver, msg.Body)
+	return fmt.Sprintf("%s%s*%s*%s#", msg.Symbol, msg.Sender, msg.Receiver, msg.Body)
 }
 
 func detectCommandId(body string) commandId {
