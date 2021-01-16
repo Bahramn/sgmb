@@ -1,11 +1,12 @@
 package config
 
 type ServerConfiguration struct {
-	TCP Protocol
-	UDP Protocol
+	TCP  Protocol
+	UDP  Protocol
+	HTTP Protocol
 }
 
 type Protocol struct {
-	Active bool
+	Active  bool
 	Address string
 }

@@ -10,7 +10,7 @@ const (
 )
 
 type Command struct {
-	id commandId
-	client *Client
+	id      commandId
+	client  *Client
 	message *Message
 }

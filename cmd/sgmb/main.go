@@ -24,6 +24,8 @@ func main() {
 
 	go s.ServeUdp(conf.Server.UDP)
 
+	go s.ServeHttp(conf.Server.HTTP)
+
 	for t := range time.Tick(30 * time.Second) {
 		s.CheckClientsByLastPingAt()
 		fmt.Printf("%v  active connections : %d \n", t.Format("2006-01-02 3:4:5 pm"), s.NumberOfClients())
